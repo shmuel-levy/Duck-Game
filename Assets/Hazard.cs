@@ -8,6 +8,9 @@ public class Hazard : MonoBehaviour
     [SerializeField] private int damage = 1;
     [SerializeField] private bool isLethal = false; // If true, kills player instantly
     
+    // Public property to access damage value
+    public int Damage => damage;
+    
     [Header("Visual Effects")]
     [SerializeField] private Color hazardColor = Color.red;
     
@@ -43,7 +46,6 @@ public class Hazard : MonoBehaviour
                 if (isLethal)
                 {
                     // Kill the player instantly
-                    Debug.Log($"Player hit lethal hazard: {gameObject.name}");
                     player.TakeDamage();
                     player.TakeDamage(); // Take damage multiple times to kill
                     player.TakeDamage();
@@ -51,7 +53,6 @@ public class Hazard : MonoBehaviour
                 else
                 {
                     // Deal normal damage
-                    Debug.Log($"Player hit hazard: {gameObject.name}");
                     player.TakeDamage();
                 }
             }

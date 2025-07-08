@@ -13,16 +13,15 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Vector3 offset = new Vector3(0, 2, -10); // Camera offset from target
     
     [Header("Follow Settings")]
-    [SerializeField] private float followSpeed = 5f; // How fast camera follows target
     [SerializeField] private float lookAheadDistance = 3f; // How far ahead to look based on movement
     [SerializeField] private float lookAheadSpeed = 2f; // How fast look-ahead responds to movement
     
     [Header("Boundary Settings")]
-    [SerializeField] private bool useBoundaries = false; // Whether to constrain camera movement
-    [SerializeField] private float minX = -10f; // Left boundary
-    [SerializeField] private float maxX = 10f;  // Right boundary
+    [SerializeField] private bool useBoundaries = true; // Whether to constrain camera movement
+    [SerializeField] private float minX = -25f; // Left boundary (expanded for new ground)
+    [SerializeField] private float maxX = 25f;  // Right boundary (expanded for new ground)
     [SerializeField] private float minY = -5f;  // Bottom boundary
-    [SerializeField] private float maxY = 5f;   // Top boundary
+    [SerializeField] private float maxY = 10f;  // Top boundary (increased for platforms)
     
     [Header("Smooth Damping")]
     [SerializeField] private float smoothTime = 0.3f; // Smoothing time for camera movement
@@ -51,7 +50,6 @@ public class CameraFollow : MonoBehaviour
             if (duck != null)
             {
                 target = duck.transform;
-                Debug.Log("CameraFollow: Found duck automatically!");
             }
             else
             {

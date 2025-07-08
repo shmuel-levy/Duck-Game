@@ -24,6 +24,15 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip deathSound;
     [SerializeField] private AudioClip landSound;
     
+    [Header("Weapon Sounds")]
+    [SerializeField] private AudioClip pistolFire;
+    [SerializeField] private AudioClip shotgunFire;
+    [SerializeField] private AudioClip machineGunFire;
+    [SerializeField] private AudioClip sniperFire;
+    [SerializeField] private AudioClip weaponReload;
+    [SerializeField] private AudioClip emptyGun;
+    [SerializeField] private AudioClip weaponSwitch;
+    
     [Header("Audio Settings")]
     [SerializeField] private float sfxVolume = 0.7f;
     [SerializeField] private bool musicEnabled = true;
@@ -81,8 +90,6 @@ public class AudioManager : MonoBehaviour
         {
             PlayBackgroundMusic();
         }
-        
-        Debug.Log("AudioManager initialized successfully!");
     }
     
     /// <summary>
@@ -96,7 +103,14 @@ public class AudioManager : MonoBehaviour
             { "coin", coinCollectSound },
             { "damage", damageSound },
             { "death", deathSound },
-            { "land", landSound }
+            { "land", landSound },
+            { "pistolFire", pistolFire },
+            { "shotgunFire", shotgunFire },
+            { "machineGunFire", machineGunFire },
+            { "sniperFire", sniperFire },
+            { "weaponReload", weaponReload },
+            { "emptyGun", emptyGun },
+            { "weaponSwitch", weaponSwitch }
         };
     }
     
@@ -109,7 +123,6 @@ public class AudioManager : MonoBehaviour
         
         musicSource.clip = backgroundMusic;
         musicSource.Play();
-        Debug.Log("Background music started");
     }
     
     /// <summary>
@@ -134,7 +147,6 @@ public class AudioManager : MonoBehaviour
         if (audioClips.ContainsKey(soundName) && audioClips[soundName] != null)
         {
             sfxSource.PlayOneShot(audioClips[soundName]);
-            Debug.Log($"Playing sound: {soundName}");
         }
         else
         {
@@ -219,7 +231,6 @@ public class AudioManager : MonoBehaviour
     public void ToggleSFX()
     {
         sfxEnabled = !sfxEnabled;
-        Debug.Log($"SFX {(sfxEnabled ? "enabled" : "disabled")}");
     }
     
     /// <summary>

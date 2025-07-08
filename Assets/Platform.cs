@@ -60,8 +60,6 @@ public class Platform : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log($"Player landed on platform: {gameObject.name}");
-            
             // Make the player a child of the platform so they move with it
             if (isMoving)
             {
@@ -77,8 +75,6 @@ public class Platform : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log($"Player left platform: {gameObject.name}");
-            
             // Remove the player from being a child of the platform
             collision.transform.SetParent(null);
         }

@@ -39,9 +39,6 @@ public class Collectible : MonoBehaviour
         
         // Store the starting position for bobbing animation
         startPosition = transform.position;
-        
-        // Set the tag for easy identification
-        gameObject.tag = "Collectible";
     }
     
     void Update()
@@ -97,10 +94,14 @@ public class Collectible : MonoBehaviour
             AudioManager.Instance.PlayCoinSound();
         }
         
+        // Play coin sparkle particles
+        if (ParticleEffectsManager.Instance != null)
+        {
+            ParticleEffectsManager.Instance.PlayCoinSparkle(transform.position);
+        }
+        
         // Play collection effect
         StartCoroutine(CollectionEffect());
-        
-        Debug.Log($"Collected! +{pointValue} points");
     }
     
     /// <summary>

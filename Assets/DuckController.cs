@@ -16,8 +16,8 @@ public class DuckController : MonoBehaviour
     [SerializeField] private float invincibilityTime = 1f; // Time player is invincible after taking damage
     
     [Header("Ground Detection")]
-    [SerializeField] private LayerMask groundLayer = 1; // Default layer
-    [SerializeField] private float groundCheckDistance = 0.2f; // Increased for better detection
+    [SerializeField] private LayerMask groundLayer = 1; // Default layer (bit 1)
+    [SerializeField] private float groundCheckDistance = 0.3f; // Increased for better detection
     
     // Private variables
     private Rigidbody2D rb;
@@ -48,7 +48,6 @@ public class DuckController : MonoBehaviour
         
         // Initialize health
         currentHealth = maxHealth;
-        Debug.Log($"Duck health initialized: {currentHealth}/{maxHealth}");
         
         // Set the player tag
         gameObject.tag = "Player";
@@ -96,22 +95,21 @@ public class DuckController : MonoBehaviour
         // If we hit something, we're grounded
         isGrounded = hit.collider != null;
         
-        // Debug information (only log when state changes to avoid spam)
-        if (isGrounded != wasGroundedLastFrame)
-        {
-            Debug.Log($"Ground state changed: Grounded={isGrounded}, Jumps Remaining={jumpsRemaining}");
-        }
-        
         // If we just landed (weren't grounded last frame, but are now)
         if (!wasGroundedLastFrame && isGrounded)
         {
-            Debug.Log("LANDING DETECTED - Resetting jumps!");
             ResetJumps();
             
             // Play landing sound
             if (AudioManager.Instance != null)
             {
                 AudioManager.Instance.PlayLandSound();
+            }
+            
+            // Play landing dust particles
+            if (ParticleEffectsManager.Instance != null)
+            {
+                ParticleEffectsManager.Instance.PlayLandingDust(transform.position);
             }
         }
     }
@@ -146,8 +144,11 @@ public class DuckController : MonoBehaviour
                 AudioManager.Instance.PlayJumpSound();
             }
             
-            // Debug log to show remaining jumps
-            Debug.Log($"Jump! Jumps remaining: {jumpsRemaining}");
+            // Play jump dust particles
+            if (ParticleEffectsManager.Instance != null)
+            {
+                ParticleEffectsManager.Instance.PlayJumpDust(transform.position);
+            }
         }
     }
     
@@ -161,6 +162,22 @@ public class DuckController : MonoBehaviour
         
         // Set the horizontal velocity while preserving the vertical velocity (for jumping/falling)
         rb.velocity = new Vector2(targetVelocityX, rb.velocity.y);
+        
+        // Flip the duck and weapon based on movement direction
+        if (horizontalInput > 0.01f)
+        {
+            if (transform.localScale.x <= 0)
+            {
+                transform.localScale = new Vector3(1, transform.localScale.y, 1);
+            }
+        }
+        else if (horizontalInput < -0.01f)
+        {
+            if (transform.localScale.x >= 0)
+            {
+                transform.localScale = new Vector3(-1, transform.localScale.y, 1);
+            }
+        }
     }
     
     /// <summary>
@@ -169,7 +186,6 @@ public class DuckController : MonoBehaviour
     private void ResetJumps()
     {
         jumpsRemaining = maxJumps;
-        Debug.Log("Jumps reset! You can now double jump again.");
     }
     
     /// <summary>
@@ -183,8 +199,13 @@ public class DuckController : MonoBehaviour
             // Check if we're landing from above (velocity.y <= 0 means falling)
             if (rb.velocity.y <= 0)
             {
-                Debug.Log("COLLISION DETECTED - Resetting jumps via collision!");
                 ResetJumps();
+                
+                // Play landing particles (only if we weren't grounded last frame)
+                if (!wasGroundedLastFrame && ParticleEffectsManager.Instance != null)
+                {
+                    ParticleEffectsManager.Instance.PlayLandingDust(transform.position);
+                }
             }
         }
     }
@@ -209,18 +230,22 @@ public class DuckController : MonoBehaviour
         // Don't take damage if invincible
         if (isInvincible)
         {
-            Debug.Log("Duck is invincible, no damage taken!");
             return;
         }
         
         // Reduce health
         currentHealth--;
-        Debug.Log($"Duck took damage! Health: {currentHealth}/{maxHealth}");
         
         // Play damage sound
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.PlayDamageSound();
+        }
+        
+        // Play damage particles
+        if (ParticleEffectsManager.Instance != null)
+        {
+            ParticleEffectsManager.Instance.PlayDamageParticles(transform.position);
         }
         
         // Start invincibility
@@ -248,7 +273,6 @@ public class DuckController : MonoBehaviour
             if (invincibilityTimer <= 0)
             {
                 isInvincible = false;
-                Debug.Log("Invincibility ended!");
             }
         }
     }
@@ -284,8 +308,6 @@ public class DuckController : MonoBehaviour
     /// </summary>
     private void Die()
     {
-        Debug.Log("Duck died! Game Over!");
-        
         // Play death sound
         if (AudioManager.Instance != null)
         {
@@ -307,5 +329,13 @@ public class DuckController : MonoBehaviour
     public int GetCurrentHealth()
     {
         return currentHealth;
+    }
+    
+    /// <summary>
+    /// Gets the current grounded state
+    /// </summary>
+    public bool IsGrounded()
+    {
+        return isGrounded;
     }
 }

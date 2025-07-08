@@ -74,8 +74,6 @@ public class GameManager : MonoBehaviour
         
         // Load high score from PlayerPrefs
         highScore = PlayerPrefs.GetInt("HighScore", 0);
-        
-        Debug.Log("Game initialized!");
     }
     
     /// <summary>
@@ -93,10 +91,7 @@ public class GameManager : MonoBehaviour
             highScore = currentScore;
             PlayerPrefs.SetInt("HighScore", highScore);
             PlayerPrefs.Save();
-            Debug.Log($"New High Score: {highScore}!");
         }
-        
-        Debug.Log($"Score: {currentScore} (+{points})");
     }
     
     /// <summary>
@@ -144,7 +139,6 @@ public class GameManager : MonoBehaviour
     private void GameOver()
     {
         isGameActive = false;
-        Debug.Log("Game Over!");
         
         // You can add more game over logic here
         // - Show game over screen

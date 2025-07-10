@@ -166,6 +166,28 @@ public class AudioManager : MonoBehaviour
     }
     
     /// <summary>
+    /// Gets an audio clip by name
+    /// </summary>
+    /// <param name="clipName">Name of the audio clip</param>
+    /// <returns>The audio clip or null if not found</returns>
+    public AudioClip GetAudioClip(string clipName)
+    {
+        Debug.Log($"AudioManager: Looking for clip '{clipName}'");
+        if (audioClips.ContainsKey(clipName))
+        {
+            AudioClip clip = audioClips[clipName];
+            Debug.Log($"AudioManager: Found clip '{clipName}': {(clip != null ? "Valid" : "NULL")}");
+            return clip;
+        }
+        else
+        {
+            Debug.LogWarning($"AudioManager: Clip '{clipName}' not found in dictionary!");
+            Debug.Log($"Available clips: {string.Join(", ", audioClips.Keys)}");
+        }
+        return null;
+    }
+    
+    /// <summary>
     /// Plays jump sound effect
     /// </summary>
     public void PlayJumpSound()

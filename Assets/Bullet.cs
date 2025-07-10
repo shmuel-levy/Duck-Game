@@ -27,13 +27,54 @@ public class Bullet : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)
         {
+            // Create a visible bullet sprite if none exists
+            if (spriteRenderer.sprite == null)
+            {
+                spriteRenderer.sprite = CreateBulletSprite();
+            }
+            
             // Make bullet more visible
             spriteRenderer.color = Color.yellow;
             spriteRenderer.sortingOrder = 10;
         }
+        else
+        {
+            Debug.LogError("Bullet has no SpriteRenderer!");
+        }
         
         // Destroy bullet after lifetime
         Destroy(gameObject, lifetime);
+    }
+    
+    /// <summary>
+    /// Creates a simple bullet sprite
+    /// </summary>
+    private Sprite CreateBulletSprite()
+    {
+        Texture2D texture = new Texture2D(8, 8);
+        Color[] pixels = new Color[8 * 8];
+        
+        // Create a simple circular bullet
+        for (int x = 0; x < 8; x++)
+        {
+            for (int y = 0; y < 8; y++)
+            {
+                float distance = Vector2.Distance(new Vector2(x, y), new Vector2(4, 4));
+                if (distance <= 3)
+                {
+                    pixels[y * 8 + x] = Color.yellow;
+                }
+                else
+                {
+                    pixels[y * 8 + x] = Color.clear;
+                }
+            }
+        }
+        
+        texture.SetPixels(pixels);
+        texture.Apply();
+        
+        return Sprite.Create(texture, new Rect(0, 0, 8, 8), new Vector2(0.5f, 0.5f));
     }
     
     void Update()
@@ -80,12 +121,6 @@ public class Bullet : MonoBehaviour
     /// </summary>
     private void HandleHit(Collider2D hitObject)
     {
-        // Deal damage to enemy if it's an enemy
-        if (hitObject.CompareTag("Enemy"))
-        {
-            // You can add enemy damage logic here
-        }
-        
         // Play hit effects
         PlayHitEffects();
         

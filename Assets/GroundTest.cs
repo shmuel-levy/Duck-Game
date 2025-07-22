@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Simple test script to debug ground detection and effects
+/// Simple test script to debug ground detection and effe ts
 /// Attach this to your Duck GameObject
 /// </summary>
 public class GroundTest : MonoBehaviour

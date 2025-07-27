@@ -41,6 +41,7 @@ public class SimpleWeaponSwitcher : MonoBehaviour
         if (weaponSprites.Length == 0) return;
         currentWeaponIndex = (currentWeaponIndex + 1) % weaponSprites.Length;
         UpdateWeaponSprite();
+        PlayWeaponSwitchSound();
     }
 
     void PreviousWeapon()
@@ -48,6 +49,7 @@ public class SimpleWeaponSwitcher : MonoBehaviour
         if (weaponSprites.Length == 0) return;
         currentWeaponIndex = (currentWeaponIndex - 1 + weaponSprites.Length) % weaponSprites.Length;
         UpdateWeaponSprite();
+        PlayWeaponSwitchSound();
     }
 
     void UpdateWeaponSprite()
@@ -55,6 +57,20 @@ public class SimpleWeaponSwitcher : MonoBehaviour
         if (weaponRenderer != null && weaponSprites.Length > 0)
         {
             weaponRenderer.sprite = weaponSprites[currentWeaponIndex];
+        }
+    }
+    
+    // Public method to get current weapon index
+    public int GetCurrentWeaponIndex()
+    {
+        return currentWeaponIndex;
+    }
+    
+    void PlayWeaponSwitchSound()
+    {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySound("weaponSwitch");
         }
     }
 } 

@@ -30,7 +30,19 @@ public class WeaponFlipper : MonoBehaviour
             transform.localScale = new Vector3(1, 1, 1);
         }
 
-        if (weaponRenderer != null)
-            weaponRenderer.flipX = transform.localScale.x < 0;
+        // Rotate weapon to face the same direction as the duck
+        if (weaponSprite != null)
+        {
+            if (transform.localScale.x < 0)
+            {
+                // Facing left - rotate weapon to face left
+                weaponSprite.localRotation = Quaternion.Euler(0, 180, 0);
+            }
+            else
+            {
+                // Facing right - rotate weapon to face right
+                weaponSprite.localRotation = Quaternion.Euler(0, 0, 0);
+            }
+        }
     }
 } 

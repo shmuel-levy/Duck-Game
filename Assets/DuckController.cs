@@ -225,7 +225,7 @@ public class DuckController : MonoBehaviour
     /// <summary>
     /// Takes damage and handles invincibility
     /// </summary>
-    public void TakeDamage()
+    public void TakeDamage(int damage = 1)
     {
         // Don't take damage if invincible
         if (isInvincible)
@@ -234,7 +234,7 @@ public class DuckController : MonoBehaviour
         }
         
         // Reduce health
-        currentHealth--;
+        currentHealth -= damage;
         
         // Play damage sound
         if (AudioManager.Instance != null)

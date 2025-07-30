@@ -156,6 +156,48 @@ public class PlayerData
 }
 ```
 
+## Troubleshooting Common Issues
+
+### Namespace Errors
+If you get errors like "The type or namespace name 'X' could not be found":
+
+1. **Add the correct using directive**:
+   ```csharp
+   using DuckGame.Controllers;  // For DuckController
+   using DuckGame.Managers;     // For managers
+   using DuckGame.Core;         // For events and data
+   ```
+
+2. **Check namespace declarations**:
+   ```csharp
+   namespace DuckGame.Controllers
+   {
+       public class MyController : MonoBehaviour
+       {
+           // Your code here
+       }
+   }
+   ```
+
+3. **Common namespace mappings**:
+   - `DuckController` → `DuckGame.Controllers`
+   - `GameManager` → `DuckGame.Managers`
+   - `AudioManager` → `DuckGame.Managers`
+   - `Enemy` → `DuckGame.Controllers`
+
+### Script Organization
+- **Managers** go in `Assets/Scripts/Managers/`
+- **Controllers** go in `Assets/Scripts/Controllers/`
+- **Systems** go in `Assets/Scripts/Systems/`
+- **UI** components go in `Assets/Scripts/UI/`
+- **Utilities** go in `Assets/Scripts/Utils/`
+
+### Unity Inspector Issues
+After reorganizing scripts, you may need to:
+1. Reassign script references in the Inspector
+2. Check that all prefabs have the correct script references
+3. Verify that event listeners are properly connected
+
 ## Migration Guide
 
 If you have existing scripts that need to be updated:
@@ -197,6 +239,11 @@ If you have existing scripts that need to be updated:
 - UI-related components (to be added)
 
 ### Utils/
-- Utility classes and helpers (to be added)
+- `ScriptNamespaceHelper.cs` - Namespace management helper
+- Utility classes and helpers
+
+## Script Location Note
+
+The Scripts folder is located inside the Assets folder (`Assets/Scripts/`). This is a common Unity practice and is perfectly fine. Some projects place Scripts outside Assets, but both approaches work well. The current organization follows Unity's recommended structure.
 
 This architecture provides a solid foundation for a scalable, maintainable game project. 

@@ -1,6 +1,10 @@
 using UnityEngine;
+using DuckGame.Core;
+using DuckGame.Managers;
 
-public class Enemy : MonoBehaviour
+namespace DuckGame.Controllers
+{
+    public class Enemy : MonoBehaviour
 {
     [Header("Enemy Settings")]
     [SerializeField] private float moveSpeed = 2f;
@@ -85,6 +89,7 @@ public class Enemy : MonoBehaviour
                 break;
         }
     }
+}
     
     void UpdateState()
     {
@@ -211,11 +216,8 @@ public class Enemy : MonoBehaviour
         // Flash red
         StartCoroutine(FlashRed());
         
-        // Play damage sound
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlaySound("damage");
-        }
+                    // Play damage sound using event system
+            GameEvents.OnPlaySound.Invoke("damage");
         
         if (currentHealth <= 0)
         {
@@ -240,11 +242,8 @@ public class Enemy : MonoBehaviour
         isDead = true;
         Debug.Log("Enemy died!");
         
-        // Play death sound
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlaySound("death");
-        }
+                    // Play death sound using event system
+            GameEvents.OnPlaySound.Invoke("death");
         
         // Spawn death effect
         if (deathEffect != null)
